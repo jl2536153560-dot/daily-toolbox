@@ -1,0 +1,30 @@
+{
+  "name": "everyday-toolbox",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node --test tests/core.test.mjs",
+    "test:browser": "node tests/browser.mjs",
+    "test:edges": "node tests/edges.mjs",
+    "build:pages": "tsc --noEmit && vite build --mode github-pages --base=./ --outDir pages-dist",
+    "test:pages": "node tests/pages.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "1.46.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-router-dom": "7.18.3"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "playwright": "1.58.2",
+    "typescript": "7.0.2",
+    "vite": "8.3.0"
+  },
+  "packageManager": "pnpm@11.19.0"
+}

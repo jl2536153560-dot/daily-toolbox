@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.qa/
+pages-dist/
+.sites-runtime/
+.env.local
+.env.*.local
