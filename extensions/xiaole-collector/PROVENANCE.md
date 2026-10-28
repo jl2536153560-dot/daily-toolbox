@@ -1,0 +1,7 @@
+# 来源与第三方说明
+
+小乐收集由用户提供的本地“喂鱼采集-私聊监控版”和“抖音评论排序”项目改造，增加独立界面、B站能力、同步/转写修复和评论持续采集。保留源文件中现有的作者和说明信息。
+
+提供的项目中没有发现适用于整个原项目的许可证文件，因此本仓库没有为整个项目补加或宣称 MIT 等开源许可。
+
+评论界面的 Phosphor Icons 使用 MIT 许可，完整版权和许可条款保留在 `extensions/comment-assistant/THIRD_PARTY_NOTICES.txt` 与 `src/comment-assistant/public/THIRD_PARTY_NOTICES.txt`。开发依赖各自遵循其发行包附带的许可证，安装时由包管理器获取。

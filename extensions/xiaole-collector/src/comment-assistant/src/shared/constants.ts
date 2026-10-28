@@ -1,0 +1,3 @@
+export const OBSERVER_DEBOUNCE_MS = 450;
+export const LOW_PARSE_SUCCESS_RATE = 0.45;
+export const MAX_COLLECTED_COMMENTS = 100_000;

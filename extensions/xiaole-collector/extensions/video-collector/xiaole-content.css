@@ -1,0 +1,20 @@
+/* Small, scoped visual layer. Host website styles and comment content stay untouched. */
+#douhot-creator-extractor-panel,#fish-bili-panel{width:236px!important;padding:15px!important;background:#f5f2e9!important;background-image:radial-gradient(#26220f0b .65px,transparent .65px)!important;background-size:5px 5px!important;color:#22221f!important;border:1px solid #22221f!important;border-radius:8px!important;box-shadow:5px 5px 0 #22221f24!important;font-family:"Microsoft YaHei","PingFang SC",Arial,sans-serif!important;text-align:left!important}
+#douhot-creator-extractor-panel .douhot-extractor-title,#fish-bili-panel>strong{font-size:14px!important;line-height:1.5!important;color:#22221f!important;font-weight:800!important;letter-spacing:.3px!important}
+#douhot-creator-extractor-panel .douhot-extractor-header{padding-bottom:10px!important;border-bottom:1px solid #22221f!important}
+#fish-bili-panel>strong{display:block!important;padding-bottom:10px!important;border-bottom:1px solid #22221f!important}
+#douhot-creator-extractor-panel button,#fish-bili-panel button{min-height:34px!important;background:#fffdf6!important;border:1px solid #d8d4c9!important;border-radius:4px!important;color:#22221f!important;font-size:12px!important;font-weight:500!important}
+#douhot-creator-extractor-panel .douhot-extractor-single-work,#douhot-creator-extractor-panel .douhot-extractor-works,#fish-bili-panel [data-task=single],#fish-bili-panel [data-task=works]{background:#f34b30!important;border-color:#f34b30!important;color:#fff!important;font-weight:700!important}
+#douhot-creator-extractor-panel .douhot-extractor-works-filter,#fish-bili-panel [data-task=filter]{background:#ffe83b!important;border-color:#ffe83b!important}
+#douhot-creator-extractor-panel .douhot-extractor-primary,#douhot-creator-extractor-panel .douhot-extractor-sync,#fish-bili-panel [data-task=creator]{background:#22221f!important;color:#f5f2e9!important;border-color:#22221f!important}
+#douhot-creator-extractor-panel .douhot-extractor-collapse{width:26px!important;min-height:26px!important;border-color:#d8d4c9!important;background:#ffe83b!important;color:#22221f!important}
+#douhot-creator-extractor-panel .douhot-extractor-pause:disabled,#fish-bili-panel .controls button:disabled{opacity:.4!important}
+#douhot-creator-extractor-panel .douhot-extractor-status,#fish-bili-status{font-size:11px!important;line-height:1.65!important;color:#737169!important;background:#e9e6dc!important;padding:8px!important;border-radius:4px!important}
+#douhot-creator-extractor-panel .douhot-extractor-status[data-kind=error],#fish-bili-panel .error{color:#b22e20!important}
+#douhot-creator-extractor-panel .douhot-extractor-status[data-kind=success]{color:#4f6438!important}
+#douhot-creator-extractor-panel input[type=checkbox],#fish-bili-panel input[type=checkbox],#douhot-works-filter-dialog input,#fish-bili-filter input{accent-color:#f34b30!important}
+#fish-bili-panel label,#douhot-creator-extractor-panel label{color:#57554e!important;font-size:11px!important}
+#fish-bili-panel small{font-size:10px!important;line-height:1.6!important;color:#737169!important;margin-top:4px!important}
+#douhot-works-filter-dialog .douhot-works-filter-card,#fish-bili-filter form{background:#f5f2e9!important;border:1px solid #22221f!important;border-radius:8px!important;color:#22221f!important}
+#douhot-works-filter-dialog .douhot-works-filter-submit,#fish-bili-filter button[type=submit]{background:#f34b30!important;border-color:#f34b30!important;color:#fff!important}
+#douhot-creator-extractor-panel button:focus-visible,#fish-bili-panel button:focus-visible{outline:3px solid #e2bb14!important;outline-offset:2px!important}

@@ -1,0 +1,26 @@
+{
+  "name": "xiaole-comment-collector",
+  "version": "1.0.2",
+  "private": true,
+  "description": "自动滚动采集抖音主评论，按点赞或回复排序，一键导出 CSV。",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.321",
+    "esbuild": "^0.25.5",
+    "fake-indexeddb": "^6.2.6",
+    "happy-dom": "^20.11.1",
+    "playwright": "1.64.1",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.3"
+  },
+  "dependencies": {
+    "@phosphor-icons/core": "^2.1.1"
+  }
+}

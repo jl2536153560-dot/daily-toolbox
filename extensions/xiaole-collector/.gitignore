@@ -1,0 +1,6 @@
+node_modules/
+.qa*/
+*.log
+.DS_Store
+src/comment-assistant/dist/
+src/comment-assistant/manifest.json

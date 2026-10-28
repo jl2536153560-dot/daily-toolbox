@@ -60,3 +60,14 @@ pnpm test:edges
 已包含 GitHub Pages 自动部署配置。推送到 `main` 后，工作流会检查、构建和发布。首次使用需在仓库 Settings → Pages 中选择 GitHub Actions，详见 [GitHub Pages 发布说明](GITHUB_PAGES.md)。
 
 Pages 版本使用 `#/reminder`、`#/training`、`#/rehab` 形式的链接，可以直接分享和刷新。普通 `pnpm build` 版本仍使用路径路由，需要静态服务器配置 SPA 回退。
+
+## Chrome 扩展：小乐收集
+
+新增两个独立 Chrome 扩展，源码、安装包与配置说明见 [小乐收集](extensions/xiaole-collector/README.md)。
+
+- **视频采集**：抖音与 B站视频、主页作品采集，导出、飞书同步与可配置的百炼转写。
+- **评论助手**：抖音一级评论自动采集，默认采集到页面末尾（最多10万条），刷新续采、去重、排序和 CSV 导出。
+
+[下载两个工具的组合包](extensions/xiaole-collector/downloads/xiaole-collector-bundle-v1.0.2.zip) · [个人网站使用说明](https://jingle-personal-0924.jl2536153560.chatgpt.site/xiaole.html)
+
+公开版需要填写使用者自己的飞书连接与转写配置，不包含个人授权或预设私人资料库。
