@@ -93,7 +93,7 @@ var BiliBg = (() => {
     const data = await api('/x/v2/reply', { type: 1, oid: work.aid, sort: 2, pn: 1 }, { run });
     const replies = [...(data.top_replies || []), ...(data.replies || [])];
     const unique = [...new Map(replies.map((reply) => [String(reply.rpid), reply])).values()];
-    return unique.sort((a,b) => Number(b.like || 0) - Number(a.like || 0)).slice(0,3)
+    return unique.filter(reply => hasCommentText(reply.content?.message, Object.keys(reply.content?.emote || {}))).sort((a,b) => Number(b.like || 0) - Number(a.like || 0)).slice(0,3)
       .map((reply, i) => `${i + 1}. ${reply.member?.uname || ''}：${reply.content?.message || ''}（赞 ${reply.like || 0}）`).join('\n');
   }
 

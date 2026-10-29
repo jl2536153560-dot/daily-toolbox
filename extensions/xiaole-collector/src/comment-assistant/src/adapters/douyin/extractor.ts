@@ -141,6 +141,11 @@ export function extractCommentText(
     !explicit ||
     !actionRow ||
     (!actionRow.contains(explicit) && !explicit.contains(actionRow));
+  // An identified empty image/sticker body is a valid non-text comment. Do not
+  // fall back to its author, image alt/title or nearby metadata as the body.
+  if (explicit && explicitIsSeparateFromActions && !explicitText && explicit.querySelector('img, svg, video, canvas')) {
+    return { text: "", foundBySelector: true };
+  }
   if (
     explicitIsSeparateFromActions &&
     meaningfulCommentText(explicitText, authorName)

@@ -14,6 +14,14 @@ function driver(overrides: Partial<CollectionDriver> = {}): CollectionDriver {
   };
 }
 describe("automatic comment collection", () => {
+  it("continues through changing emoji-only virtual pages even when kept count and geometry stay unchanged", async () => {
+    let ticks = 0;
+    const output = await collectComments(driver({
+      scan: () => ({ ...result(ticks < 100 ? 0 : 100), observedCommentSignature: `batch-${ticks}` }),
+      pageState: () => page({ atBottom: true }), wait: async () => { ticks += 1; }
+    }));
+    expect(output.reason).toBe("target"); expect(ticks).toBe(100);
+  });
   it("stops at the target without extra scrolling", async () => {
     const scroll = vi.fn(() => true); let reads = 0;
     const output = await collectComments(driver({ scan: () => result(++reads * 50), scroll }));

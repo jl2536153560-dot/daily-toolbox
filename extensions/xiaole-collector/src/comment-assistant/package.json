@@ -1,6 +1,6 @@
 {
   "name": "xiaole-comment-collector",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "description": "自动滚动采集抖音主评论，按点赞或回复排序，一键导出 CSV。",
   "type": "module",
@@ -9,7 +9,8 @@
     "dev": "node scripts/build.mjs --watch",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:browser": "node scripts/browser-smoke.mjs"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.321",

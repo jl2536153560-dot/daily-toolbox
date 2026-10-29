@@ -1,5 +1,6 @@
 import { MAX_COLLECTED_COMMENTS } from "../shared/constants";
 import type { CommentItem, SortMode } from "../shared/types";
+import { hasCommentText } from "../utils/comment-content";
 
 export type CollectionSessionState = "running" | "paused" | "stopped" | "completed";
 export interface SessionLease { sessionKey: string; videoId: string; runId: string }
@@ -100,14 +101,21 @@ export class CommentSessionStore {
   }
 
   load(sessionKey: string, videoId: string): Promise<SavedCollectionSession | null> {
-    return this.serial(async () => this.transaction(await this.database(), "readonly", (transaction, finish) => {
+    return this.serial(async () => this.transaction(await this.database(), "readwrite", (transaction, finish) => {
       const session = transaction.objectStore(SESSIONS).get(scopeKey(sessionKey, videoId));
       session.onsuccess = () => {
         const metadata = session.result as SessionMetadata | undefined;
         if (!metadata) { finish(null); return; }
         const rows = transaction.objectStore(COMMENTS).index(SESSION_INDEX).getAll(scopeKey(sessionKey, videoId));
         rows.onsuccess = () => {
-          const comments = (rows.result as StoredComment[]).map(snapshot).sort((left, right) => left.originalIndex - right.originalIndex);
+          const stored = rows.result as StoredComment[];
+          const comments = stored.filter(comment => hasCommentText(comment.text)).map(snapshot).sort((left, right) => left.originalIndex - right.originalIndex);
+          // Migrate this tab/video only: excluded legacy rows must not consume
+          // the 100000-comment quota after a refresh.
+          if (comments.length !== stored.length || metadata.count !== comments.length) {
+            for (const comment of stored) if (!hasCommentText(comment.text)) transaction.objectStore(COMMENTS).delete([sessionKey, videoId, comment.id]);
+            transaction.objectStore(SESSIONS).put({ ...metadata, count: comments.length });
+          }
           finish({ metadata: { ...metadata, count: comments.length }, comments });
         };
       };
@@ -163,7 +171,9 @@ export class CommentSessionStore {
           request.onsuccess = () => {
             try {
               const previous = request.result as StoredComment | undefined;
-              if (previous || count < this.maxComments) {
+              if (!hasCommentText(comment.text)) {
+                if (previous) { store.delete([lease.sessionKey, lease.videoId, comment.id]); count -= 1; }
+              } else if (previous || count < this.maxComments) {
                 if (!previous) count += 1;
                 store.put({ ...comment, originalIndex: previous?.originalIndex ?? comment.originalIndex, sessionKey: lease.sessionKey } satisfies StoredComment);
               }

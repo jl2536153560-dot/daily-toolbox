@@ -54,6 +54,7 @@ export interface PageStatus {
 }
 
 export interface ScanResult {
+  observedCommentSignature?: string;
   pageStatus: PageStatus;
   comments: CommentItem[];
   mainCommentCount: number;

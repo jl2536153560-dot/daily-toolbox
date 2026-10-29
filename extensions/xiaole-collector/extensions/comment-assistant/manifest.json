@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "小乐收集 · 评论助手",
   "short_name": "小乐评论",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "minimum_chrome_version": "116",
   "description": "自动滚动采集抖音主评论，按点赞或回复排序，一键导出 CSV。",
   "permissions": [

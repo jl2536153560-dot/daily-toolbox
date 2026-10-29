@@ -22,6 +22,18 @@
     return { comments: unique, duplicateCount };
   }
 
+  // src/utils/comment-content.ts
+  var COMMENT_EMOTE_LABELS = new Set("\u5FAE\u7B11 \u6487\u5634 \u8272 \u53D1\u5446 \u5F97\u610F \u6D41\u6CEA \u5BB3\u7F9E \u95ED\u5634 \u7761 \u5927\u54ED \u5C34\u5C2C \u53D1\u6012 \u8C03\u76AE \u5472\u7259 \u60CA\u8BB6 \u96BE\u8FC7 \u9177 \u51B7\u6C57 \u6293\u72C2 \u5410 \u5077\u7B11 \u53EF\u7231 \u767D\u773C \u50B2\u6162 \u9965\u997F \u56F0 \u60CA\u6050 \u6D41\u6C57 \u61A8\u7B11 \u5927\u5175 \u594B\u6597 \u5492\u9A82 \u7591\u95EE \u5618 \u6655 \u6298\u78E8 \u8870 \u9AB7\u9AC5 \u6572\u6253 \u518D\u89C1 \u64E6\u6C57 \u62A0\u9F3B \u9F13\u638C \u7CD7\u5927\u4E86 \u574F\u7B11 \u5DE6\u54FC\u54FC \u53F3\u54FC\u54FC \u54C8\u6B20 \u9119\u89C6 \u59D4\u5C48 \u5FEB\u54ED\u4E86 \u9634\u9669 \u4EB2\u4EB2 \u5413 \u53EF\u601C \u83DC\u5200 \u897F\u74DC \u5564\u9152 \u7BEE\u7403 \u4E52\u4E53 \u5496\u5561 \u996D \u732A\u5934 \u73AB\u7470 \u51CB\u8C22 \u793A\u7231 \u7231\u5FC3 \u5FC3\u788E \u86CB\u7CD5 \u95EA\u7535 \u70B8\u5F39 \u5200 \u8DB3\u7403 \u74E2\u866B \u4FBF\u4FBF \u6708\u4EAE \u592A\u9633 \u793C\u7269 \u62E5\u62B1 \u5F3A \u5F31 \u63E1\u624B \u80DC\u5229 \u62B1\u62F3 \u52FE\u5F15 \u62F3\u5934 \u5DEE\u52B2 \u7231\u4F60 no ok \u7231\u60C5 \u98DE\u543B \u8DF3\u8DF3 \u53D1\u6296 \u6004\u706B \u8F6C\u5708 \u78D5\u5934 \u56DE\u5934 \u8DF3\u7EF3 \u6325\u624B \u6FC0\u52A8 \u8857\u821E \u732E\u543B \u5DE6\u592A\u6781 \u53F3\u592A\u6781 \u6342\u8138 \u7B11\u54ED \u6CEA\u5954 \u65E0\u8BED \u7075\u673A\u4E00\u52A8 \u673A\u667A \u77F3\u5316 \u601D\u8003 \u5410\u8840 \u60CA\u5446 \u8036 \u8D5E \u8E29 \u5927\u7B11 \u6BD4\u5FC3 \u9001\u5FC3 666 \u5C0F\u9F13\u638C \u611F\u8C22\u6765\u770B \u770B \u4E0D\u770B \u7D2B\u8587\u522B\u8D70 \u7EDD \u8033\u6735 \u806A\u660E \u5F97\u5230\u4E86 \u524D\u6392 \u76B1\u7709 \u53D1\u7EA2\u5305 \u7EA2\u5305 \u62B1\u62B1 \u52A0\u6CB9 \u5965\u7279\u66FC \u8131\u5355doge doge doge_\u91D1\u7B8D \u5999\u554A \u55D1\u74DC\u5B50 \u5403\u74DC \u6253call \u6ED1\u7A3D \u8FA3\u773C\u775B \u6342\u773C \u54E6\u547C \u65E0\u8BED\u4E86 \u559C\u6781\u800C\u6CE3 \u9178\u4E86 \u50B2\u5A07 \u4FDD\u4F51 \u561F\u561F \u751F\u6C14 \u95EE\u53F7 \u5927\u7B11 \u53EF\u7231 \u60CA\u559C \u70B9\u8D5E \u652F\u6301 \u8138\u7EA2 \u6C57 \u751F\u75C5 \u5634\u5507 \u561A\u745F \u7728\u773C \u75AF\u72C2 \u60CA\u5413 \u5446\u65E0\u8F9C \u75BC \u84C4\u529B \u53D1\u8D22 \u9001\u82B1 \u798F\u70DF\u82B1 \u70DF\u82B1 \u70B8\u5F39 \u4EB2\u4EB2 \u98DE\u543B \u82B1 \u864E\u5E74\u5927\u5409 \u5154\u5E74\u5927\u5409 \u9F99\u5E74\u5927\u5409 \u86C7\u5E74\u5927\u5409 \u9A6C\u5E74\u5927\u5409 \u9A6C\u5230\u6210\u529F \u56FE\u7247 \u56FE \u56FE\u7247\u8BC4\u8BBA \u8868\u60C5 \u8868\u60C5\u5305 \u52A8\u56FE \u8D34\u7EB8 image picture photo sticker emoji gif animated_emoticon".split(/\s+/u));
+  function hasCommentText(value, extraEmotes = []) {
+    if (typeof value !== "string") return false;
+    const extras = new Set(extraEmotes.map((label) => label.trim().toLowerCase()));
+    const text = value.replace(/[0-9#*]\uFE0F?\u20E3/gu, "").replace(/\[([^\[\]\r\n]{1,50})\]|【([^【】\r\n]{1,50})】/gu, (token, square, wide) => {
+      const label = String(square ?? wide).trim().toLowerCase();
+      return COMMENT_EMOTE_LABELS.has(label) || extras.has(token.toLowerCase()) || extras.has(label) ? "" : token;
+    }).replace(new RegExp("\\p{Extended_Pictographic}|\\p{Regional_Indicator}|\\p{Emoji_Modifier}|\\p{Default_Ignorable_Code_Point}", "gu"), "");
+    return /[\p{L}\p{N}]/u.test(text);
+  }
+
   // src/utils/hash.ts
   function fnv1a(value) {
     let hash = 2166136261;
@@ -437,6 +449,9 @@
     const explicit = findFirst(node, DOUYIN_SELECTORS.commentText).element;
     const explicitText = cleanText2(explicit?.textContent);
     const explicitIsSeparateFromActions = !explicit || !actionRow || !actionRow.contains(explicit) && !explicit.contains(actionRow);
+    if (explicit && explicitIsSeparateFromActions && !explicitText && explicit.querySelector("img, svg, video, canvas")) {
+      return { text: "", foundBySelector: true };
+    }
     if (explicitIsSeparateFromActions && meaningfulCommentText(explicitText, authorName)) {
       return { text: explicitText, foundBySelector: true };
     }
@@ -808,7 +823,7 @@
     restore(videoKey, comments) {
       this.clear();
       this.videoKey = videoKey;
-      for (const comment of comments.slice(0, MAX_COLLECTED_COMMENTS)) {
+      for (const comment of comments.filter((item) => hasCommentText(item.text)).slice(0, MAX_COLLECTED_COMMENTS)) {
         if (comment.videoId !== videoKey || this.commentsById.has(comment.id)) continue;
         const restored = { ...comment, originalIndex: this.nextOriginalIndex++ };
         this.commentsById.set(comment.id, restored);
@@ -858,6 +873,7 @@
       let authorParseSuccess = 0;
       let likeParseSuccess = 0;
       let replyParseSuccess = 0;
+      let nonTextCount = 0;
       let filteredNodeCount = selected.nodes.length - visibleNodes.length + levelResult.filteredReplies;
       for (const node of mainNodes) {
         const author = extractAuthor(node);
@@ -866,8 +882,9 @@
           author.name,
           author.element
         );
-        if (!textResult.text) {
+        if (!hasCommentText(textResult.text)) {
           filteredNodeCount += 1;
+          if (textResult.foundBySelector || textResult.text || node.querySelector('img, [data-e2e*="sticker"]')) nonTextCount += 1;
           continue;
         }
         const like = extractLikeCount(node);
@@ -946,14 +963,15 @@
         elapsedMs: Math.round(performance.now() - startedAt),
         warnings
       };
+      if (nonTextCount) warnings.push(`\u672C\u6279\u5DF2\u8DF3\u8FC7 ${nonTextCount} \u6761\u7EAF\u8868\u60C5\u3001\u56FE\u7247\u6216\u7B26\u53F7\u8BC4\u8BBA\u3002`);
       let pageStatus = initialStatus;
       if (initialStatus.state === "ready" && collectedComments.length === 0) {
         pageStatus = {
           ...initialStatus,
-          state: selected.nodes.length ? "structure-changed" : "comments-empty",
-          message: selected.nodes.length ? "\u627E\u5230\u4E86\u8BC4\u8BBA\u533A\u57DF\uFF0C\u4F46\u6CA1\u6709\u6210\u529F\u8BFB\u53D6\u8BC4\u8BBA\u6B63\u6587\u3002" : "\u8BC4\u8BBA\u533A\u5DF2\u6253\u5F00\uFF0C\u4F46\u5F53\u524D\u6CA1\u6709\u8BFB\u53D6\u5230\u5DF2\u52A0\u8F7D\u8BC4\u8BBA\u3002"
+          state: selected.nodes.length && nonTextCount < mainNodes.length ? "structure-changed" : "comments-empty",
+          message: nonTextCount === mainNodes.length && nonTextCount > 0 ? "\u672C\u6279\u8BC4\u8BBA\u53EA\u6709\u8868\u60C5\u3001\u56FE\u7247\u6216\u7B26\u53F7\uFF0C\u5DF2\u8DF3\u8FC7\uFF1B\u81EA\u52A8\u91C7\u96C6\u4F1A\u7EE7\u7EED\u52A0\u8F7D\u540E\u9762\u7684\u6587\u5B57\u8BC4\u8BBA\u3002" : selected.nodes.length ? "\u627E\u5230\u4E86\u8BC4\u8BBA\u533A\u57DF\uFF0C\u4F46\u6CA1\u6709\u6210\u529F\u8BFB\u53D6\u8BC4\u8BBA\u6B63\u6587\u3002" : "\u8BC4\u8BBA\u533A\u5DF2\u6253\u5F00\uFF0C\u4F46\u5F53\u524D\u6CA1\u6709\u8BFB\u53D6\u5230\u5DF2\u52A0\u8F7D\u8BC4\u8BBA\u3002"
         };
-      } else if (mainNodes.length > 0 && diagnosticRate(textParseSuccess, mainNodes.length) < LOW_PARSE_SUCCESS_RATE) {
+      } else if (mainNodes.length > nonTextCount && diagnosticRate(textParseSuccess, mainNodes.length - nonTextCount) < LOW_PARSE_SUCCESS_RATE) {
         pageStatus = {
           ...initialStatus,
           state: "structure-changed",
@@ -969,6 +987,7 @@
       ) || collectedComments.length > 0;
       return {
         pageStatus,
+        observedCommentSignature: mainNodes.length ? JSON.stringify([mainNodes.length, ...[mainNodes[0], mainNodes[mainNodes.length - 1]].map((node) => extractNativeId(node) ?? cleanText3(node.textContent).slice(0, 600))]) : "",
         comments: collectedComments,
         mainCommentCount: collectedComments.length,
         scannedAt: (/* @__PURE__ */ new Date()).toISOString(),
@@ -1071,7 +1090,7 @@
     return time || location2;
   }
   function exportCommentsCsv(comments) {
-    const rows = comments.map((comment, index) => {
+    const rows = comments.filter((comment) => hasCommentText(comment.text)).map((comment, index) => {
       return [
         index + 1,
         comment.text,
@@ -1118,6 +1137,7 @@
     let result = null;
     let rounds = 0;
     let previousCount = -1;
+    let previousSignature = "";
     let previousState = null;
     let lastProgressAt = now();
     let previousTick = lastProgressAt;
@@ -1151,16 +1171,18 @@
         const count = result.comments.length;
         if (count >= target) return { scan: result, reason: "target" };
         const countAdvanced = count > previousCount;
+        const observedAdvanced = Boolean(result.observedCommentSignature && result.observedCommentSignature !== previousSignature);
         const positionAdvanced = Number.isFinite(state.position) && Number.isFinite(previousState?.position) && state.position > previousState.position + 1;
         const extentAdvanced = Number.isFinite(state.extent) && Number.isFinite(previousState?.extent) && state.extent > previousState.extent + 1;
-        if (countAdvanced || positionAdvanced || extentAdvanced || previousState?.available === false) lastProgressAt = time;
+        if (countAdvanced || observedAdvanced || positionAdvanced || extentAdvanced || previousState?.available === false) lastProgressAt = time;
         const geometryChanged = state.position !== previousState?.position || state.extent !== previousState?.extent;
         if (!state.loading && state.atEnd) return { scan: result, reason: "end" };
         if (state.atBottom && !state.loading) {
-          if (bottomStableSince === null || countAdvanced || geometryChanged) bottomStableSince = time;
+          if (bottomStableSince === null || countAdvanced || observedAdvanced || geometryChanged) bottomStableSince = time;
           if (time - bottomStableSince >= settleMs) return { scan: result, reason: "end" };
         } else bottomStableSince = null;
         previousCount = count;
+        previousSignature = result.observedCommentSignature || "";
       } else bottomStableSince = null;
       previousState = state;
       if (time - lastProgressAt >= idleTimeoutMs) return { scan: result, reason: "paused" };
@@ -1374,7 +1396,7 @@ progress{display:block;width:100%;height:5px;margin-top:10px;border:0;border-rad
       text.setAttribute("role", "status");
       status.append(text);
       status.append(button("\u590D\u5236\u8BCA\u65AD", "diagnostics", this.callbacks.onCopyDiagnostics, copy_default));
-      content.append(head, bar, row, options, progress, status, el("div", "footnote", "\u4EC5\u6536\u96C6\u7F51\u9875\u5B9E\u9645\u52A0\u8F7D\u7684\u4E3B\u8BC4\u8BBA \xB7 \u4E0D\u542B\u697C\u4E2D\u697C \xB7 \u4E0D\u4FDD\u8BC1\u5168\u91CF"));
+      content.append(head, bar, row, options, progress, status, el("div", "footnote", "\u4EC5\u6536\u96C6\u7F51\u9875\u5B9E\u9645\u52A0\u8F7D\u7684\u6587\u5B57\u4E3B\u8BC4\u8BBA \xB7 \u5DF2\u8FC7\u6EE4\u7EAF\u8868\u60C5 \xB7 \u4E0D\u542B\u697C\u4E2D\u697C"));
       this.shadow.append(content);
     }
   };
@@ -1485,7 +1507,7 @@ progress{display:block;width:100%;height:5px;margin-top:10px;border:0;border-rad
       });
     }
     load(sessionKey, videoId) {
-      return this.serial(async () => this.transaction(await this.database(), "readonly", (transaction, finish) => {
+      return this.serial(async () => this.transaction(await this.database(), "readwrite", (transaction, finish) => {
         const session = transaction.objectStore(SESSIONS).get(scopeKey(sessionKey, videoId));
         session.onsuccess = () => {
           const metadata = session.result;
@@ -1495,7 +1517,12 @@ progress{display:block;width:100%;height:5px;margin-top:10px;border:0;border-rad
           }
           const rows = transaction.objectStore(COMMENTS).index(SESSION_INDEX).getAll(scopeKey(sessionKey, videoId));
           rows.onsuccess = () => {
-            const comments = rows.result.map(snapshot).sort((left, right) => left.originalIndex - right.originalIndex);
+            const stored = rows.result;
+            const comments = stored.filter((comment) => hasCommentText(comment.text)).map(snapshot).sort((left, right) => left.originalIndex - right.originalIndex);
+            if (comments.length !== stored.length || metadata.count !== comments.length) {
+              for (const comment of stored) if (!hasCommentText(comment.text)) transaction.objectStore(COMMENTS).delete([sessionKey, videoId, comment.id]);
+              transaction.objectStore(SESSIONS).put({ ...metadata, count: comments.length });
+            }
             finish({ metadata: { ...metadata, count: comments.length }, comments });
           };
         };
@@ -1556,7 +1583,12 @@ progress{display:block;width:100%;height:5px;margin-top:10px;border:0;border-rad
             request.onsuccess = () => {
               try {
                 const previous = request.result;
-                if (previous || count < this.maxComments) {
+                if (!hasCommentText(comment.text)) {
+                  if (previous) {
+                    store.delete([lease.sessionKey, lease.videoId, comment.id]);
+                    count -= 1;
+                  }
+                } else if (previous || count < this.maxComments) {
                   if (!previous) count += 1;
                   store.put({ ...comment, originalIndex: previous?.originalIndex ?? comment.originalIndex, sessionKey: lease.sessionKey });
                 }

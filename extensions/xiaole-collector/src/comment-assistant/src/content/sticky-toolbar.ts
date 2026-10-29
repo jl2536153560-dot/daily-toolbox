@@ -73,6 +73,6 @@ export class StickyCommentToolbar {
     const options = el("div", "options-row"); const auto = el("label", "auto"); const check = el("input"); check.type = "checkbox"; check.checked = this.preferences.autoStart; check.addEventListener("change", () => this.callbacks.onPreferences({ ...this.preferences, autoStart: check.checked })); auto.append(check, document.createTextNode("打开评论区后自动采集")); const count = el("span", "count", String(this.count)); count.append(el("small", "", ` / ${this.preferences.target}`)); options.append(auto, count);
     const progress = el("progress"); progress.max = this.preferences.target; progress.value = Math.min(this.count, this.preferences.target); progress.setAttribute("aria-label", `已收集 ${this.count} 条，目标 ${this.preferences.target} 条`);
     const status = el("div", "status-row"); const text = el("span", `status${this.error ? " error" : ""}`, this.message); text.setAttribute("role", "status"); status.append(text); status.append(button("复制诊断", "diagnostics", this.callbacks.onCopyDiagnostics, copyIcon));
-    content.append(head, bar, row, options, progress, status, el("div", "footnote", "仅收集网页实际加载的主评论 · 不含楼中楼 · 不保证全量")); this.shadow.append(content);
+    content.append(head, bar, row, options, progress, status, el("div", "footnote", "仅收集网页实际加载的文字主评论 · 已过滤纯表情 · 不含楼中楼")); this.shadow.append(content);
   }
 }

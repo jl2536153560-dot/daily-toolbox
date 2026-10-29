@@ -64,7 +64,7 @@ test('published manifests resolve every asset, have independent identity, and re
     const files=[...Object.values(m.icons||{}),m.background?.service_worker,m.action?.default_popup,m.options_page,
       ...Object.values(m.action?.default_icon||{}),...(m.content_scripts||[]).flatMap(s=>[...(s.js||[]),...(s.css||[])])].filter(Boolean);
     for(const file of files)assert.ok(fs.existsSync(path.join(dir,file)),folder+'/'+file);
-    assert.equal(m.version,'1.0.2');assert.equal(m.key,undefined);assert.ok(!m.permissions.includes('nativeMessaging'));
+    assert.equal(m.version,'1.0.3');assert.equal(m.key,undefined);assert.ok(!m.permissions.includes('nativeMessaging'));
   }
 });
 test('public video has no automatic local connector or hardwired personal Feishu link',()=>{

@@ -23,6 +23,28 @@ beforeEach(() => {
 afterEach(() => { vi.restoreAllMocks(); document.body.replaceChildren(); document.head.replaceChildren(); });
 
 describe("恢复缓存后继续采集", () => {
+  it("纯表情批次不会报结构错误，后续文字继续采集且不占用编号", () => {
+    const sticker = comment("image", "");
+    sticker.querySelector("p")!.innerHTML = '<img alt="自定义表情描述" src="https://example.test/sticker.png">';
+    page(comment("emoji", "[捂脸]😂"), sticker, comment("symbols", "！！！"));
+    const adapter = new DouyinAdapter();
+    const empty = adapter.scan();
+    expect(empty.comments).toHaveLength(0);
+    expect(empty.pageStatus.state).toBe("comments-empty");
+    expect(empty.pageStatus.message).toContain("已跳过");
+    expect(adapter.drainChanges()).toHaveLength(0);
+    page(comment("text", "求教程😂"));
+    expect(adapter.scan().comments[0]).toMatchObject({ text: "求教程😂", originalIndex: 0 });
+  });
+
+  it("恢复旧版缓存时去掉表情，文字评论仍然保留", () => {
+    page(comment("a", "已有文字评论"));
+    const source = new DouyinAdapter().scan().comments[0]!;
+    const restored = new DouyinAdapter();
+    restored.restore("123456", [{ ...source, id: "emoji", text: "[图片]" }, source]);
+    document.body.replaceChildren();
+    expect(restored.scan().comments.map(item => item.text)).toEqual(["已有文字评论"]);
+  });
   it("刷新仅加载首批DOM时保留全部旧正文，不重新保存未变化行", () => {
     page(comment("a", "第一条完整正文"), comment("b", "第二条完整正文，已经滚出页面"));
     const first = new DouyinAdapter(); const saved = first.scan().comments;

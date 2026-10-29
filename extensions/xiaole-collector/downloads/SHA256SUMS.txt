@@ -1,3 +1,6 @@
 68461748028267461a7708eac8e08aecc325d07642ca51bd90416e1e1c7cc8ae  xiaole-collector-bundle-v1.0.2.zip
+37872118666b80047552044437311bd879aa6a5c5f0bf81d40cf9b364e8bc9cc  xiaole-collector-bundle-v1.0.3.zip
 85c11f542d7b02be86b6f2f649c0556fa02c86d74ab555a2fb7bde7fad07431d  xiaole-comment-assistant-v1.0.2.zip
+aa5565f136fb687e3db9dc9b7880453369113fa089fb9f05f35640a139e87e34  xiaole-comment-assistant-v1.0.3.zip
 8357bca6d7f9575c7de05e90eace2f7026c0be53f835751a8f40e22a7be359aa  xiaole-video-collector-v1.0.2.zip
+12512cbf07c1217704e7bae94f51fb2aab8218e04611e7dddabbbde18cfd8c6e  xiaole-video-collector-v1.0.3.zip

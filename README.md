@@ -68,6 +68,6 @@ Pages 版本使用 `#/reminder`、`#/training`、`#/rehab` 形式的链接，可
 - **视频采集**：抖音与 B站视频、主页作品采集，导出、飞书同步与可配置的百炼转写。
 - **评论助手**：抖音一级评论自动采集，默认采集到页面末尾（最多10万条），刷新续采、去重、排序和 CSV 导出。
 
-[下载两个工具的组合包](extensions/xiaole-collector/downloads/xiaole-collector-bundle-v1.0.2.zip) · [个人网站使用说明](https://jingle-personal-0924.jl2536153560.chatgpt.site/xiaole.html)
+[下载两个工具的组合包](extensions/xiaole-collector/downloads/xiaole-collector-bundle-v1.0.3.zip) · [个人网站使用说明](https://jingle-personal-0924.jl2536153560.chatgpt.site/xiaole.html)
 
 公开版需要填写使用者自己的飞书连接与转写配置，不包含个人授权或预设私人资料库。

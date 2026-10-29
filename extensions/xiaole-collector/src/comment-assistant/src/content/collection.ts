@@ -40,6 +40,7 @@ export async function collectComments(driver: CollectionDriver): Promise<Collect
   // A custom safety ceiling pauses the run; regular runs follow page/end evidence.
   const maxRounds = driver.maxRounds ?? Number.POSITIVE_INFINITY;
   let result: ScanResult | null = null; let rounds = 0; let previousCount = -1;
+  let previousSignature = "";
   let previousState: CollectionPageState | null = null;
   let lastProgressAt = now(); let previousTick = lastProgressAt;
   let bottomStableSince: number | null = null; let wasSuspended = false;
@@ -66,18 +67,20 @@ export async function collectComments(driver: CollectionDriver): Promise<Collect
       const count = result.comments.length;
       if (count >= target) return { scan: result, reason: "target" };
       const countAdvanced = count > previousCount;
+      const observedAdvanced = Boolean(result.observedCommentSignature && result.observedCommentSignature !== previousSignature);
       const positionAdvanced = Number.isFinite(state.position) && Number.isFinite(previousState?.position)
         && state.position! > previousState!.position! + 1;
       const extentAdvanced = Number.isFinite(state.extent) && Number.isFinite(previousState?.extent)
         && state.extent! > previousState!.extent! + 1;
-      if (countAdvanced || positionAdvanced || extentAdvanced || previousState?.available === false) lastProgressAt = time;
+      if (countAdvanced || observedAdvanced || positionAdvanced || extentAdvanced || previousState?.available === false) lastProgressAt = time;
       const geometryChanged = state.position !== previousState?.position || state.extent !== previousState?.extent;
       if (!state.loading && state.atEnd) return { scan: result, reason: "end" };
       if (state.atBottom && !state.loading) {
-        if (bottomStableSince === null || countAdvanced || geometryChanged) bottomStableSince = time;
+        if (bottomStableSince === null || countAdvanced || observedAdvanced || geometryChanged) bottomStableSince = time;
         if (time - bottomStableSince >= settleMs) return { scan: result, reason: "end" };
       } else bottomStableSince = null;
       previousCount = count;
+      previousSignature = result.observedCommentSignature || "";
     } else bottomStableSince = null;
     previousState = state;
     if (time - lastProgressAt >= idleTimeoutMs) return { scan: result, reason: "paused" };

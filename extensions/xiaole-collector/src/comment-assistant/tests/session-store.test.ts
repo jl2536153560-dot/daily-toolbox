@@ -12,6 +12,32 @@ function create(factory = new IDBFactory(), maxComments?: number) {
 afterEach(async () => { vi.restoreAllMocks(); await Promise.all(stores.splice(0).map(store => store.close())); });
 
 describe("刷新后恢复评论采集进度", () => {
+  it("表情不入库、不占上限，更新成表情时移除旧行", async () => {
+    const store = create(new IDBFactory(), 2);
+    const lease = await store.begin("tab-1", video, options);
+    await store.checkpoint(lease, [makeComment({ id: "e", text: "[图片]" }), makeComment({ id: "a", text: "怎么做😂" }), makeComment({ id: "b", text: "👍🏽" })]);
+    expect((await store.load("tab-1", video))?.metadata.count).toBe(1);
+    await store.checkpoint(lease, [makeComment({ id: "a", text: "[捂脸]" }), makeComment({ id: "c", text: "求教程" })]);
+    expect((await store.load("tab-1", video))?.comments.map(item => item.text)).toEqual(["求教程"]);
+  });
+
+  it("刷新清理旧版表情缓存并释放上限，保留其它标签页及会话状态", async () => {
+    const factory = new IDBFactory(), store = create(factory, 2);
+    const lease = await store.begin("tab-1", video, options);
+    await store.checkpoint(lease, [makeComment({ id: "a", text: "保留文字" }), makeComment({ id: "old", text: "旧版占位" })]);
+    await store.setState(lease, "stopped");
+    const other = await store.begin("tab-2", video, options);
+    await store.checkpoint(other, [makeComment({ text: "另一个标签页" })]);
+    const db = await new Promise<IDBDatabase>((resolve, reject) => { const r = factory.open("xiaole-comment-sessions-v1", 1); r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error); });
+    await new Promise<void>((resolve, reject) => { const tx = db.transaction("comments", "readwrite"); tx.objectStore("comments").put({ ...makeComment({ id: "old", text: "[捂脸]" }), sessionKey: "tab-1" }); tx.oncomplete = () => resolve(); tx.onabort = () => reject(tx.error); });
+    db.close();
+    const restored = await store.load("tab-1", video);
+    expect(restored?.metadata).toMatchObject({ state: "stopped", count: 1, runId: lease.runId });
+    const next = await store.begin("tab-1", video, options);
+    await store.checkpoint(next, [makeComment({ id: "new", text: "继续采集文字" })]);
+    expect((await store.load("tab-1", video))?.comments.map(item => item.text)).toEqual(["保留文字", "继续采集文字"]);
+    expect((await store.load("tab-2", video))?.comments[0]?.text).toBe("另一个标签页");
+  });
   it("刷新创建新实例后恢复运行状态、滚动位置和已收集评论", async () => {
     const factory = new IDBFactory(); const old = create(factory);
     const lease = await old.begin("tab-1", video, options);

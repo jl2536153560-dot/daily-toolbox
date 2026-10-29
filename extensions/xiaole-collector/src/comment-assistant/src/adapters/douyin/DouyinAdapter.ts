@@ -6,6 +6,7 @@ import type {
   SelectorDiagnostics
 } from "../../shared/types";
 import { deduplicateComments } from "../../utils/deduplicate";
+import { hasCommentText } from "../../utils/comment-content";
 import { createFallbackCommentId } from "../../utils/hash";
 import {
   findCommentContainer,
@@ -348,7 +349,7 @@ export class DouyinAdapter {
 
   public restore(videoKey: string, comments: readonly CommentItem[]): void {
     this.clear(); this.videoKey = videoKey;
-    for (const comment of comments.slice(0, MAX_COLLECTED_COMMENTS)) {
+    for (const comment of comments.filter(item => hasCommentText(item.text)).slice(0, MAX_COLLECTED_COMMENTS)) {
       if (comment.videoId !== videoKey || this.commentsById.has(comment.id)) continue;
       const restored = { ...comment, originalIndex: this.nextOriginalIndex++ };
       this.commentsById.set(comment.id, restored);
@@ -406,6 +407,7 @@ export class DouyinAdapter {
     let authorParseSuccess = 0;
     let likeParseSuccess = 0;
     let replyParseSuccess = 0;
+    let nonTextCount = 0;
     let filteredNodeCount =
       selected.nodes.length - visibleNodes.length + levelResult.filteredReplies;
 
@@ -416,8 +418,9 @@ export class DouyinAdapter {
         author.name,
         author.element
       );
-      if (!textResult.text) {
+      if (!hasCommentText(textResult.text)) {
         filteredNodeCount += 1;
+        if (textResult.foundBySelector || textResult.text || node.querySelector('img, [data-e2e*="sticker"]')) nonTextCount += 1;
         continue;
       }
 
@@ -506,18 +509,21 @@ export class DouyinAdapter {
       warnings
     };
 
+    if (nonTextCount) warnings.push(`本批已跳过 ${nonTextCount} 条纯表情、图片或符号评论。`);
     let pageStatus = initialStatus;
     if (initialStatus.state === "ready" && collectedComments.length === 0) {
       pageStatus = {
         ...initialStatus,
-        state: selected.nodes.length ? "structure-changed" : "comments-empty",
-        message: selected.nodes.length
+        state: selected.nodes.length && nonTextCount < mainNodes.length ? "structure-changed" : "comments-empty",
+        message: nonTextCount === mainNodes.length && nonTextCount > 0
+          ? "本批评论只有表情、图片或符号，已跳过；自动采集会继续加载后面的文字评论。"
+          : selected.nodes.length
           ? "找到了评论区域，但没有成功读取评论正文。"
           : "评论区已打开，但当前没有读取到已加载评论。"
       };
     } else if (
-      mainNodes.length > 0 &&
-      diagnosticRate(textParseSuccess, mainNodes.length) <
+      mainNodes.length > nonTextCount &&
+      diagnosticRate(textParseSuccess, mainNodes.length - nonTextCount) <
         LOW_PARSE_SUCCESS_RATE
     ) {
       pageStatus = {
@@ -540,6 +546,7 @@ export class DouyinAdapter {
 
     return {
       pageStatus,
+      observedCommentSignature: mainNodes.length ? JSON.stringify([mainNodes.length, ...[mainNodes[0]!, mainNodes[mainNodes.length - 1]!].map(node => extractNativeId(node) ?? cleanText(node.textContent).slice(0, 600))]) : "",
       comments: collectedComments,
       mainCommentCount: collectedComments.length,
       scannedAt: new Date().toISOString(),

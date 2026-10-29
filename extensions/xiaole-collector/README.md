@@ -4,14 +4,14 @@
 
 | 工具 | 功能 | 版本 |
 | --- | --- | --- |
-| 视频采集 | 抖音、B站视频与主页作品；本地 JSON 导出；自己的飞书表格同步；百炼自动逐字稿 | 1.0.2 |
-| 评论助手 | 抖音一级主评论；从头采集到底；刷新续采与去重；点赞/回复排序；CSV 导出 | 1.0.2 |
+| 视频采集 | 抖音、B站视频与主页作品；本地 JSON 导出；自己的飞书表格同步；百炼自动逐字稿 | 1.0.3 |
+| 评论助手 | 抖音一级主评论；从头采集到底；刷新续采与去重；点赞/回复排序；CSV 导出 | 1.0.3 |
 
 ## 下载
 
-- [视频采集 ZIP](downloads/xiaole-video-collector-v1.0.2.zip)
-- [评论助手 ZIP](downloads/xiaole-comment-assistant-v1.0.2.zip)
-- [两个工具组合包](downloads/xiaole-collector-bundle-v1.0.2.zip)
+- [视频采集 ZIP](downloads/xiaole-video-collector-v1.0.3.zip)
+- [评论助手 ZIP](downloads/xiaole-comment-assistant-v1.0.3.zip)
+- [两个工具组合包](downloads/xiaole-collector-bundle-v1.0.3.zip)
 
 下载 GitHub 中的 ZIP 文件时，请使用文件页面上的下载按钮。源码下载也可以，直接加载下面 `extensions` 内相应目录。
 
@@ -72,3 +72,5 @@ npm run build
 ```
 
 测试数据为合成数据。公开版不会读取作者电脑的本机连接助手，也不包含个人配置、浏览器资料目录或真实采集数据。详见 [隐私说明](PRIVACY.md)、[版本变化](CHANGELOG.md) 和 [来源与第三方说明](PROVENANCE.md)。
+
+自动跳过纯表情、贴纸、图片占位和纯符号评论；带表情的文字评论原样保留。采集上限只计算文字评论，刷新恢复和导出也应用过滤。

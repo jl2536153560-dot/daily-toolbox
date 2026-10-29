@@ -1,4 +1,5 @@
 import type { CommentItem } from "../shared/types";
+import { hasCommentText } from "./comment-content";
 
 const HEADERS = [
   "排名",
@@ -39,7 +40,7 @@ function formatPublishInfo(comment: CommentItem): string {
 export function exportCommentsCsv(
   comments: readonly CommentItem[]
 ): string {
-  const rows = comments.map((comment, index) => {
+  const rows = comments.filter(comment => hasCommentText(comment.text)).map((comment, index) => {
     return [
       index + 1,
       comment.text,
